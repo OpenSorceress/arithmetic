@@ -12,7 +12,7 @@ class Arithmetic
     public function __construct($argv)
     {
         foreach ($argv as $value) {
-            if (typeHint($value) === 'string') {
+            if (is_string($value)) {
                 $this->operation = $value;
             }
             $this->numbers[] = $value;
@@ -55,7 +55,7 @@ class Arithmetic
     public function division($num = 0)
     {
         if ($num === 0) {
-            throw ErrorException("Cannot divide by zero");
+            throw new ErrorException("Cannot divide by zero");
         }
     }
 
