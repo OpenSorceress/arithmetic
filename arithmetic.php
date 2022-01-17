@@ -6,6 +6,9 @@ class Arithmetic
     public array $numbers = [];
     public string $operation = '';
 
+    /**
+     * @param $argv
+     */
     public function __construct($argv)
     {
         foreach ($argv as $value) {
@@ -27,16 +30,28 @@ class Arithmetic
 
     }
 
+    /**
+     * @param $num
+     * @return void
+     */
     public function subtraction($num = 0)
     {
 
     }
 
+    /**
+     * @param $num
+     * @return void
+     */
     public function multiplication($num = 0)
     {
 
     }
 
+    /**
+     * @param $num
+     * @return void
+     */
     public function division($num = 0)
     {
         if ($num === 0) {
