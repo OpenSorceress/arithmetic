@@ -11,12 +11,8 @@ class Arithmetic
      */
     public function __construct($argv)
     {
-
-            $file = array_shift($argv);
-            $this->_init($argv);
-
-        var_dump($this->numbers);
-        var_dump($this->operation);
+        $file = array_shift($argv);
+        unset($file); // manual GC
         $this->_init($argv);
     }
 
@@ -24,7 +20,7 @@ class Arithmetic
      * @param $args
      * @return $this
      */
-    public function _init($args) {
+    protected function _init($args) {
         foreach($args as $arg) {
           if (is_string((string)$arg) && in_array($arg, ["+", "-", "*", "/", "%"])) {
               $this->operation = $arg;
@@ -32,30 +28,34 @@ class Arithmetic
               $this->numbers[] = $arg;
           }
         }
-        $this->_order($this->operation, $this->numbers);
-        return $this;
+        return $this->_order($this->operation, $this->numbers);
     }
 
 
-    public function _order($str, $nums) {
+    protected function _order($str, $nums) {
         switch($str):
             case("+"):
-                $this->addition($nums);
+                print_r($this->addition($nums));
                 break;
             case("-"):
+                print_r($this->subtraction($nums));
                 break;
             case("*"):
+                print_r($this->multiplication($nums));
                 break;
             case("/"):
+                print_r($this->division($nums));
                 break;
             case("%"):
+                print_r($this->modulus($nums));
                 break;
         endswitch;
     }
 
 
     /**
-     * @return void
+     * @param $nums
+     * @return int
      */
     public function addition($nums)
     {
@@ -67,37 +67,62 @@ class Arithmetic
     }
 
     /**
-     * @param $num
-     * @return void
+     * @param $nums
+     * @return int
      */
-    public function subtraction($num = 0)
+    public function subtraction($nums)
     {
-
+        $out = "Need 2 integers or floats to perform subtraction operaton";
+        if (is_array($nums) && count($nums) >= 2){
+            $out = $nums[0] - $nums [1];
+        }
+        return $out;
     }
 
     /**
-     * @param $num
-     * @return integer
+     * @param $nums
+     * @return int
      */
-    public function multiplication($num = 0)
+    public function multiplication($nums)
     {
-        $result = 0;
-        foreach($this->numbers as $n) {
-            $result = $n * $num;
-            $num = $n;
+        $out = 0;
+        if (is_array($nums) && count($nums) >= 2){
+            $out = $nums[0] * $nums [1];
         }
-        return $result;
+        return $out;
     }
 
     /**
-     * @param $num
-     * @return void
+     * @param $nums
+     * @return int
      */
-    public function division($num = 0)
+    public function division($nums)
     {
-        if ($num === 0) {
-            throw new ErrorException("Cannot divide by zero");
+        $out = 0;
+        if (is_array($nums) && count($nums) >= 2) {
+            if ($nums[0] === 0 || $nums[1] === 0) {
+                throw new ErrorException("Cannot divide by zero");
+
+            }
+            $out = $nums[0] / $nums [1];
         }
+        return $out;
+    }
+
+    /**
+     * @param $nums
+     * @return int
+     */
+    public function modulus(array $nums) {
+        $out = 0;
+        if (is_array($nums) && count($nums) >= 2) {
+            if ($nums[0] === 0 || $nums[1] === 0) {
+                throw new ErrorException("Cannot divide by zero");
+            }
+            $out = $nums[0] % $nums [1];
+        }
+        return $out;
+
     }
 
 }
